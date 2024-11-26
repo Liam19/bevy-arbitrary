@@ -1,6 +1,6 @@
 #![cfg(feature = "derive")]
 
-use arbitrary::{Arbitrary, Unstructured};
+use bevy_arbitrary::{Arbitrary, Unstructured};
 
 fn arbitrary_from<'a, T: Arbitrary<'a>>(input: &'a [u8]) -> T {
     let mut buf = Unstructured::new(input);

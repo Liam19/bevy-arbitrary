@@ -44,7 +44,7 @@ use std::{mem, ops};
 ///
 /// ```
 /// # #[cfg(feature = "derive")] fn foo() {
-/// use arbitrary::{Arbitrary, Unstructured};
+/// use bevy_arbitrary::{Arbitrary, Unstructured};
 ///
 /// /// An RGB color.
 /// #[derive(Arbitrary)]
@@ -79,7 +79,7 @@ impl<'a> Unstructured<'a> {
     /// # Example
     ///
     /// ```
-    /// use arbitrary::Unstructured;
+    /// use bevy_arbitrary::Unstructured;
     ///
     /// let u = Unstructured::new(&[1, 2, 3, 4]);
     /// ```
@@ -93,7 +93,7 @@ impl<'a> Unstructured<'a> {
     /// # Example
     ///
     /// ```
-    /// use arbitrary::{Arbitrary, Unstructured};
+    /// use bevy_arbitrary::{Arbitrary, Unstructured};
     ///
     /// let mut u = Unstructured::new(&[1, 2, 3]);
     ///
@@ -117,7 +117,7 @@ impl<'a> Unstructured<'a> {
     /// # Example
     ///
     /// ```
-    /// use arbitrary::{Arbitrary, Unstructured};
+    /// use bevy_arbitrary::{Arbitrary, Unstructured};
     ///
     /// let mut u = Unstructured::new(&[1, 2, 3, 4]);
     ///
@@ -144,8 +144,8 @@ impl<'a> Unstructured<'a> {
     /// # Example
     ///
     /// ```
-    /// # #[cfg(feature="derive")] fn foo() -> arbitrary::Result<()> {
-    /// use arbitrary::{Arbitrary, Unstructured};
+    /// # #[cfg(feature="derive")] fn foo() -> bevy_arbitrary::Result<()> {
+    /// use bevy_arbitrary::{Arbitrary, Unstructured};
     ///
     /// #[derive(Arbitrary)]
     /// struct MyType {
@@ -185,7 +185,7 @@ impl<'a> Unstructured<'a> {
     /// # Example
     ///
     /// ```
-    /// use arbitrary::{Arbitrary, Result, Unstructured};
+    /// use bevy_arbitrary::{Arbitrary, Result, Unstructured};
     /// # pub struct MyCollection<T> { _t: std::marker::PhantomData<T> }
     /// # impl<T> MyCollection<T> {
     /// #     pub fn with_capacity(capacity: usize) -> Self { MyCollection { _t: std::marker::PhantomData } }
@@ -281,8 +281,8 @@ impl<'a> Unstructured<'a> {
     /// # Example
     ///
     /// ```
-    /// # fn foo() -> arbitrary::Result<()> {
-    /// use arbitrary::{Arbitrary, Unstructured};
+    /// # fn foo() -> bevy_arbitrary::Result<()> {
+    /// use bevy_arbitrary::{Arbitrary, Unstructured};
     ///
     /// let mut u = Unstructured::new(&[1, 2, 3, 4]);
     ///
@@ -312,7 +312,7 @@ impl<'a> Unstructured<'a> {
         let end = *range.end();
         assert!(
             start <= end,
-            "`arbitrary::Unstructured::int_in_range` requires a non-empty range"
+            "`bevy_arbitrary::Unstructured::int_in_range` requires a non-empty range"
         );
 
         // When there is only one possible choice, don't waste any entropy from
@@ -385,7 +385,7 @@ impl<'a> Unstructured<'a> {
     /// Selecting from an array of choices:
     ///
     /// ```
-    /// use arbitrary::Unstructured;
+    /// use bevy_arbitrary::Unstructured;
     ///
     /// let mut u = Unstructured::new(&[1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
     /// let choices = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
@@ -398,7 +398,7 @@ impl<'a> Unstructured<'a> {
     /// An error is returned if no choices are provided:
     ///
     /// ```
-    /// use arbitrary::Unstructured;
+    /// use bevy_arbitrary::Unstructured;
     ///
     /// let mut u = Unstructured::new(&[1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
     /// let choices: [char; 0] = [];
@@ -425,7 +425,7 @@ impl<'a> Unstructured<'a> {
     ///
     /// ```
     /// use std::collections::BTreeSet;
-    /// use arbitrary::Unstructured;
+    /// use bevy_arbitrary::Unstructured;
     ///
     /// let mut u = Unstructured::new(&[1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
     /// let set = BTreeSet::from(['a', 'b', 'c']);
@@ -458,7 +458,7 @@ impl<'a> Unstructured<'a> {
     /// [Fisher–Yates shuffle]: https://en.wikipedia.org/wiki/Fisher–Yates_shuffle
     ///
     /// ```
-    /// use arbitrary::Unstructured;
+    /// use bevy_arbitrary::Unstructured;
     ///
     /// let mut u = Unstructured::new(&[1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
     /// let mut permutation = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
@@ -475,7 +475,7 @@ impl<'a> Unstructured<'a> {
     /// An error is returned if the length is zero:
     ///
     /// ```
-    /// use arbitrary::Unstructured;
+    /// use bevy_arbitrary::Unstructured;
     ///
     /// let mut u = Unstructured::new(&[1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
     /// let array: [i32; 0] = [];
@@ -505,8 +505,8 @@ impl<'a> Unstructured<'a> {
     /// Generate a boolean that is `true` five sevenths of the time:
     ///
     /// ```
-    /// # fn foo() -> arbitrary::Result<()> {
-    /// use arbitrary::Unstructured;
+    /// # fn foo() -> bevy_arbitrary::Result<()> {
+    /// use bevy_arbitrary::Unstructured;
     ///
     /// # let my_data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
     /// let mut u = Unstructured::new(&my_data);
@@ -540,7 +540,7 @@ impl<'a> Unstructured<'a> {
     /// # Example
     ///
     /// ```
-    /// use arbitrary::Unstructured;
+    /// use bevy_arbitrary::Unstructured;
     ///
     /// let mut u = Unstructured::new(&[1, 2, 3, 4]);
     ///
@@ -575,7 +575,7 @@ impl<'a> Unstructured<'a> {
     /// # Example
     ///
     /// ```
-    /// use arbitrary::Unstructured;
+    /// use bevy_arbitrary::Unstructured;
     ///
     /// let mut u = Unstructured::new(&[1, 2, 3, 4]);
     ///
@@ -602,7 +602,7 @@ impl<'a> Unstructured<'a> {
     /// # Example
     ///
     /// ```
-    /// use arbitrary::Unstructured;
+    /// use bevy_arbitrary::Unstructured;
     ///
     /// let u = Unstructured::new(&[1, 2, 3]);
     ///
@@ -624,7 +624,7 @@ impl<'a> Unstructured<'a> {
     /// # Example
     ///
     /// ```
-    /// use arbitrary::Unstructured;
+    /// use bevy_arbitrary::Unstructured;
     ///
     /// let mut u = Unstructured::new(&[1, 2, 3]);
     ///
@@ -685,7 +685,7 @@ impl<'a> Unstructured<'a> {
     /// arbitrary number of times:
     ///
     /// ```
-    /// use arbitrary::{Result, Unstructured};
+    /// use bevy_arbitrary::{Result, Unstructured};
     /// use std::ops::ControlFlow;
     ///
     /// enum Type {

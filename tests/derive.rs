@@ -6,7 +6,7 @@
 // In this case, using assert! is less explicit and readable
 #![allow(clippy::bool_assert_comparison)]
 
-use arbitrary::*;
+use bevy_arbitrary::*;
 
 fn arbitrary_from<'a, T: Arbitrary<'a>>(input: &'a [u8]) -> T {
     let mut buf = Unstructured::new(input);
@@ -355,7 +355,7 @@ fn test_field_attributes() {
         price: u8,
     }
 
-    fn arbitrary_weight(u: &mut Unstructured) -> arbitrary::Result<Weight> {
+    fn arbitrary_weight(u: &mut Unstructured) -> bevy_arbitrary::Result<Weight> {
         u.int_in_range(45..=56).map(Weight)
     }
 

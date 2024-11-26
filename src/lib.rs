@@ -75,7 +75,7 @@ impl std::error::Error for MaxRecursionReached {}
 ///
 /// ```
 /// # #[cfg(feature = "derive")] mod foo {
-/// use arbitrary::Arbitrary;
+/// use bevy_arbitrary::Arbitrary;
 /// use std::collections::HashSet;
 ///
 /// #[derive(Arbitrary)]
@@ -97,7 +97,7 @@ impl std::error::Error for MaxRecursionReached {}
 ///
 /// ```
 /// # #[cfg(feature = "derive")] mod foo {
-/// use arbitrary::Arbitrary;
+/// use bevy_arbitrary::Arbitrary;
 ///
 /// trait Trait {
 ///     type Assoc: for<'a> Arbitrary<'a>;
@@ -127,7 +127,7 @@ impl std::error::Error for MaxRecursionReached {}
 /// #     pub fn new() -> Self { MyCollection { _t: std::marker::PhantomData } }
 /// #     pub fn insert(&mut self, element: T) {}
 /// # }
-/// use arbitrary::{Arbitrary, Result, Unstructured};
+/// use bevy_arbitrary::{Arbitrary, Result, Unstructured};
 ///
 /// impl<'a, T> Arbitrary<'a> for MyCollection<T>
 /// where
@@ -181,7 +181,7 @@ pub trait Arbitrary<'a>: Sized {
     ///
     /// ```
     /// # #[cfg(feature = "derive")] fn foo() {
-    /// use arbitrary::{Arbitrary, Unstructured};
+    /// use bevy_arbitrary::{Arbitrary, Unstructured};
     ///
     /// #[derive(Arbitrary)]
     /// pub struct MyType {
@@ -241,7 +241,7 @@ pub trait Arbitrary<'a>: Sized {
     /// into any other `size_hint` call, you should implement it in `size_hint`:
     ///
     /// ```
-    /// use arbitrary::{size_hint, Arbitrary, Result, Unstructured};
+    /// use bevy_arbitrary::{size_hint, Arbitrary, Result, Unstructured};
     ///
     /// struct SomeStruct(u8);
     ///
@@ -264,7 +264,7 @@ pub trait Arbitrary<'a>: Sized {
     /// and the `size_hint` implementation should forward to it:
     ///
     /// ```
-    /// use arbitrary::{size_hint, Arbitrary, MaxRecursionReached, Result, Unstructured};
+    /// use bevy_arbitrary::{size_hint, Arbitrary, MaxRecursionReached, Result, Unstructured};
     ///
     /// struct SomeStruct<A, B> {
     ///     a: A,
@@ -369,12 +369,12 @@ pub trait Arbitrary<'a>: Sized {
     /// ## The `depth` parameter
     ///
     /// When implementing `try_size_hint`, you need to use
-    /// [`arbitrary::size_hint::try_recursion_guard(depth)`][crate::size_hint::try_recursion_guard]
+    /// [`bevy_arbitrary::size_hint::try_recursion_guard(depth)`][crate::size_hint::try_recursion_guard]
     /// to prevent potential infinite recursion when calculating size hints for
     /// potentially recursive types:
     ///
     /// ```
-    /// use arbitrary::{size_hint, Arbitrary, MaxRecursionReached, Unstructured};
+    /// use bevy_arbitrary::{size_hint, Arbitrary, MaxRecursionReached, Unstructured};
     ///
     /// // This can potentially be a recursive type if `L` or `R` contain
     /// // something like `Box<Option<MyEither<L, R>>>`!
@@ -388,7 +388,7 @@ pub trait Arbitrary<'a>: Sized {
     ///     L: Arbitrary<'a>,
     ///     R: Arbitrary<'a>,
     /// {
-    ///     fn arbitrary(u: &mut Unstructured) -> arbitrary::Result<Self> {
+    ///     fn arbitrary(u: &mut Unstructured) -> bevy_arbitrary::Result<Self> {
     ///         // ...
     /// #       unimplemented!()
     ///     }
@@ -427,7 +427,7 @@ pub trait Arbitrary<'a>: Sized {
 
 /// Multiple conflicting arbitrary attributes are used on the same field:
 /// ```compile_fail
-/// #[derive(::arbitrary::Arbitrary)]
+/// #[derive(::bevy_arbitrary::Arbitrary)]
 /// struct Point {
 ///     #[arbitrary(value = 2)]
 ///     #[arbitrary(value = 2)]
@@ -437,7 +437,7 @@ pub trait Arbitrary<'a>: Sized {
 ///
 /// An unknown attribute:
 /// ```compile_fail
-/// #[derive(::arbitrary::Arbitrary)]
+/// #[derive(::bevy_arbitrary::Arbitrary)]
 /// struct Point {
 ///     #[arbitrary(unknown_attr)]
 ///     x: i32,
@@ -446,7 +446,7 @@ pub trait Arbitrary<'a>: Sized {
 ///
 /// An unknown attribute with a value:
 /// ```compile_fail
-/// #[derive(::arbitrary::Arbitrary)]
+/// #[derive(::bevy_arbitrary::Arbitrary)]
 /// struct Point {
 ///     #[arbitrary(unknown_attr = 13)]
 ///     x: i32,
@@ -455,7 +455,7 @@ pub trait Arbitrary<'a>: Sized {
 ///
 /// `value` without RHS:
 /// ```compile_fail
-/// #[derive(::arbitrary::Arbitrary)]
+/// #[derive(::bevy_arbitrary::Arbitrary)]
 /// struct Point {
 ///     #[arbitrary(value)]
 ///     x: i32,
@@ -464,7 +464,7 @@ pub trait Arbitrary<'a>: Sized {
 ///
 /// `with` without RHS:
 /// ```compile_fail
-/// #[derive(::arbitrary::Arbitrary)]
+/// #[derive(::bevy_arbitrary::Arbitrary)]
 /// struct Point {
 ///     #[arbitrary(with)]
 ///     x: i32,
@@ -473,7 +473,7 @@ pub trait Arbitrary<'a>: Sized {
 ///
 /// Multiple conflicting bounds at the container-level:
 /// ```compile_fail
-/// #[derive(::arbitrary::Arbitrary)]
+/// #[derive(::bevy_arbitrary::Arbitrary)]
 /// #[arbitrary(bound = "T: Default")]
 /// #[arbitrary(bound = "T: Default")]
 /// struct Point<T: Default> {
@@ -484,7 +484,7 @@ pub trait Arbitrary<'a>: Sized {
 ///
 /// Multiple conflicting bounds in a single bound attribute:
 /// ```compile_fail
-/// #[derive(::arbitrary::Arbitrary)]
+/// #[derive(::bevy_arbitrary::Arbitrary)]
 /// #[arbitrary(bound = "T: Default, T: Default")]
 /// struct Point<T: Default> {
 ///     #[arbitrary(default)]
@@ -494,7 +494,7 @@ pub trait Arbitrary<'a>: Sized {
 ///
 /// Multiple conflicting bounds in multiple bound attributes:
 /// ```compile_fail
-/// #[derive(::arbitrary::Arbitrary)]
+/// #[derive(::bevy_arbitrary::Arbitrary)]
 /// #[arbitrary(bound = "T: Default", bound = "T: Default")]
 /// struct Point<T: Default> {
 ///     #[arbitrary(default)]
@@ -504,7 +504,7 @@ pub trait Arbitrary<'a>: Sized {
 ///
 /// Too many bounds supplied:
 /// ```compile_fail
-/// #[derive(::arbitrary::Arbitrary)]
+/// #[derive(::bevy_arbitrary::Arbitrary)]
 /// #[arbitrary(bound = "T: Default")]
 /// struct Point {
 ///     x: i32,
@@ -513,7 +513,7 @@ pub trait Arbitrary<'a>: Sized {
 ///
 /// Too many bounds supplied across multiple attributes:
 /// ```compile_fail
-/// #[derive(::arbitrary::Arbitrary)]
+/// #[derive(::bevy_arbitrary::Arbitrary)]
 /// #[arbitrary(bound = "T: Default")]
 /// #[arbitrary(bound = "U: Default")]
 /// struct Point<T: Default> {
@@ -524,7 +524,7 @@ pub trait Arbitrary<'a>: Sized {
 ///
 /// Attempt to use the derive attribute on an enum variant:
 /// ```compile_fail
-/// #[derive(::arbitrary::Arbitrary)]
+/// #[derive(::bevy_arbitrary::Arbitrary)]
 /// enum Enum<T: Default> {
 ///     #[arbitrary(default)]
 ///     Variant(T),

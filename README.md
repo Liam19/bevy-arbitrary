@@ -51,7 +51,7 @@ And then you can simply add `#[derive(Arbitrary)]` annotations to your types:
 ```rust
 // rgb.rs
 
-use arbitrary::Arbitrary;
+use bevy_arbitrary::Arbitrary;
 
 #[derive(Arbitrary)]
 pub struct Rgb {
@@ -78,7 +78,7 @@ pub struct Rgba {
 
     // Generate `b` with a custom function of type
     //
-    //    fn(&mut Unstructured) -> arbitrary::Result<T>
+    //    fn(&mut Unstructured) -> bevy_arbitrary::Result<T>
     //
     // where `T` is the field's type.
     #[arbitrary(with = arbitrary_b)]
@@ -89,7 +89,7 @@ pub struct Rgba {
     pub a: u8,
 }
 
-fn arbitrary_b(u: &mut Unstructured) -> arbitrary::Result<u8> {
+fn arbitrary_b(u: &mut Unstructured) -> bevy_arbitrary::Result<u8> {
     u.int_in_range(64..=128)
 }
 ```
@@ -101,7 +101,7 @@ Alternatively, you can write an `Arbitrary` implementation by hand:
 ```rust
 // rgb.rs
 
-use arbitrary::{Arbitrary, Result, Unstructured};
+use bevy_arbitrary::{Arbitrary, Result, Unstructured};
 
 #[derive(Copy, Clone, Debug)]
 pub struct Rgb {

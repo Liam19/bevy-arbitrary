@@ -64,7 +64,7 @@ fn expand_derive_arbitrary(input: syn::DeriveInput) -> Result<TokenStream> {
             }
 
             #[automatically_derived]
-            impl #impl_generics arbitrary::Arbitrary<#lifetime_without_bounds> for #name #ty_generics #where_clause {
+            impl #impl_generics bevy_arbitrary::Arbitrary<#lifetime_without_bounds> for #name #ty_generics #where_clause {
                 #arbitrary_method
                 #size_hint_method
             }
@@ -141,7 +141,7 @@ fn add_trait_bounds(mut generics: Generics, lifetime: LifetimeParam) -> Generics
         if let GenericParam::Type(type_param) = param {
             type_param
                 .bounds
-                .push(parse_quote!(arbitrary::Arbitrary<#lifetime>));
+                .push(parse_quote!(bevy_arbitrary::Arbitrary<#lifetime>));
         }
     }
     generics
@@ -156,7 +156,7 @@ fn with_recursive_count_guard(
         if guard_against_recursion {
             #recursive_count.with(|count| {
                 if count.get() > 0 {
-                    return Err(arbitrary::Error::NotEnoughData);
+                    return Err(bevy_arbitrary::Error::NotEnoughData);
                 }
                 count.set(count.get() + 1);
                 Ok(())
@@ -194,11 +194,11 @@ fn gen_arbitrary_method(
             with_recursive_count_guard(recursive_count, quote! { Ok(#ident #arbitrary_take_rest) });
 
         Ok(quote! {
-            fn arbitrary(u: &mut arbitrary::Unstructured<#lifetime>) -> arbitrary::Result<Self> {
+            fn arbitrary(u: &mut bevy_arbitrary::Unstructured<#lifetime>) -> bevy_arbitrary::Result<Self> {
                 #body
             }
 
-            fn arbitrary_take_rest(mut u: arbitrary::Unstructured<#lifetime>) -> arbitrary::Result<Self> {
+            fn arbitrary_take_rest(mut u: bevy_arbitrary::Unstructured<#lifetime>) -> bevy_arbitrary::Result<Self> {
                 #take_rest_body
             }
         })
@@ -225,7 +225,7 @@ fn gen_arbitrary_method(
                 // Use a multiply + shift to generate a ranged random number
                 // with slight bias. For details, see:
                 // https://lemire.me/blog/2016/06/30/fast-random-shuffling
-                Ok(match (u64::from(<u32 as arbitrary::Arbitrary>::arbitrary(#unstructured)?) * #count) >> 32 {
+                Ok(match (u64::from(<u32 as bevy_arbitrary::Arbitrary>::arbitrary(#unstructured)?) * #count) >> 32 {
                     #(#variants,)*
                     _ => unreachable!()
                 })
@@ -279,11 +279,11 @@ fn gen_arbitrary_method(
                 let arbitrary_take_rest = arbitrary_enum_method(recursive_count, quote! { &mut u }, &variants_take_rest);
 
                 quote! {
-                    fn arbitrary(u: &mut arbitrary::Unstructured<#lifetime>) -> arbitrary::Result<Self> {
+                    fn arbitrary(u: &mut bevy_arbitrary::Unstructured<#lifetime>) -> bevy_arbitrary::Result<Self> {
                         #arbitrary
                     }
 
-                    fn arbitrary_take_rest(mut u: arbitrary::Unstructured<#lifetime>) -> arbitrary::Result<Self> {
+                    fn arbitrary_take_rest(mut u: bevy_arbitrary::Unstructured<#lifetime>) -> bevy_arbitrary::Result<Self> {
                         #arbitrary_take_rest
                     }
                 }
@@ -344,9 +344,9 @@ fn construct_take_rest(fields: &Fields) -> Result<TokenStream> {
             FieldConstructor::Default => quote!(::core::default::Default::default()),
             FieldConstructor::Arbitrary => {
                 if idx + 1 == fields.len() {
-                    quote! { arbitrary::Arbitrary::arbitrary_take_rest(u)? }
+                    quote! { bevy_arbitrary::Arbitrary::arbitrary_take_rest(u)? }
                 } else {
-                    quote! { arbitrary::Arbitrary::arbitrary(&mut u)? }
+                    quote! { bevy_arbitrary::Arbitrary::arbitrary(&mut u)? }
                 }
             }
             FieldConstructor::With(function_or_closure) => quote!((#function_or_closure)(&mut u)?),
@@ -367,7 +367,7 @@ fn gen_size_hint_method(input: &DeriveInput) -> Result<TokenStream> {
                             quote!(Ok((0, Some(0))))
                         }
                         FieldConstructor::Arbitrary => {
-                            quote! { <#ty as arbitrary::Arbitrary>::try_size_hint(depth) }
+                            quote! { <#ty as bevy_arbitrary::Arbitrary>::try_size_hint(depth) }
                         }
 
                         // Note that in this case it's hard to determine what size_hint must be, so size_of::<T>() is
@@ -382,7 +382,7 @@ fn gen_size_hint_method(input: &DeriveInput) -> Result<TokenStream> {
             .collect::<Result<Vec<TokenStream>>>()
             .map(|hints| {
                 quote! {
-                    Ok(arbitrary::size_hint::and_all(&[
+                    Ok(bevy_arbitrary::size_hint::and_all(&[
                         #( #hints? ),*
                     ]))
                 }
@@ -397,8 +397,8 @@ fn gen_size_hint_method(input: &DeriveInput) -> Result<TokenStream> {
                 }
 
                 #[inline]
-                fn try_size_hint(depth: usize) -> ::core::result::Result<(usize, ::core::option::Option<usize>), arbitrary::MaxRecursionReached> {
-                    arbitrary::size_hint::try_recursion_guard(depth, |depth| #hint)
+                fn try_size_hint(depth: usize) -> ::core::result::Result<(usize, ::core::option::Option<usize>), bevy_arbitrary::MaxRecursionReached> {
+                    bevy_arbitrary::size_hint::try_recursion_guard(depth, |depth| #hint)
                 }
             }
         })
@@ -422,11 +422,11 @@ fn gen_size_hint_method(input: &DeriveInput) -> Result<TokenStream> {
                         Self::try_size_hint(depth).unwrap_or_default()
                     }
                     #[inline]
-                    fn try_size_hint(depth: usize) -> ::core::result::Result<(usize, ::core::option::Option<usize>), arbitrary::MaxRecursionReached> {
-                        Ok(arbitrary::size_hint::and(
-                            <u32 as arbitrary::Arbitrary>::try_size_hint(depth)?,
-                            arbitrary::size_hint::try_recursion_guard(depth, |depth| {
-                                Ok(arbitrary::size_hint::or_all(&[ #( #variants? ),* ]))
+                    fn try_size_hint(depth: usize) -> ::core::result::Result<(usize, ::core::option::Option<usize>), bevy_arbitrary::MaxRecursionReached> {
+                        Ok(bevy_arbitrary::size_hint::and(
+                            <u32 as bevy_arbitrary::Arbitrary>::try_size_hint(depth)?,
+                            bevy_arbitrary::size_hint::try_recursion_guard(depth, |depth| {
+                                Ok(bevy_arbitrary::size_hint::or_all(&[ #( #variants? ),* ]))
                             })?,
                         ))
                     }
@@ -438,7 +438,7 @@ fn gen_size_hint_method(input: &DeriveInput) -> Result<TokenStream> {
 fn gen_constructor_for_field(field: &Field) -> Result<TokenStream> {
     let ctor = match determine_field_constructor(field)? {
         FieldConstructor::Default => quote!(::core::default::Default::default()),
-        FieldConstructor::Arbitrary => quote!(arbitrary::Arbitrary::arbitrary(u)?),
+        FieldConstructor::Arbitrary => quote!(bevy_arbitrary::Arbitrary::arbitrary(u)?),
         FieldConstructor::With(function_or_closure) => quote!((#function_or_closure)(u)?),
         FieldConstructor::Value(value) => quote!(#value),
     };

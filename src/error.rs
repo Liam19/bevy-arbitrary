@@ -18,7 +18,7 @@ impl fmt::Display for Error {
         match self {
             Error::EmptyChoose => write!(
                 f,
-                "`arbitrary::Unstructured::choose` must be given a non-empty set of choices"
+                "`bevy_arbitrary::Unstructured::choose` must be given a non-empty set of choices"
             ),
             Error::NotEnoughData => write!(
                 f,
@@ -34,17 +34,17 @@ impl fmt::Display for Error {
 
 impl error::Error for Error {}
 
-/// A `Result` with the error type fixed as `arbitrary::Error`.
+/// A `Result` with the error type fixed as `bevy_arbitrary::Error`.
 ///
-/// Either an `Ok(T)` or `Err(arbitrary::Error)`.
+/// Either an `Ok(T)` or `Err(bevy_arbitrary::Error)`.
 pub type Result<T, E = Error> = std::result::Result<T, E>;
 
 #[cfg(test)]
 mod tests {
     // Often people will import our custom `Result` type because 99.9% of
-    // results in a file will be `arbitrary::Result` but then have that one last
+    // results in a file will be `bevy_arbitrary::Result` but then have that one last
     // 0.1% that want to have a custom error type. Don't make them prefix that
-    // 0.1% as `std::result::Result`; instead, let `arbitrary::Result` have an
+    // 0.1% as `std::result::Result`; instead, let `bevy_arbitrary::Result` have an
     // overridable error type.
     #[test]
     fn can_use_custom_error_types_with_result() -> super::Result<(), String> {
