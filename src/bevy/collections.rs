@@ -1,8 +1,7 @@
 use crate::{Arbitrary, Result, Unstructured};
 use std::hash::Hash;
-use bevy::utils::{HashMap, HashSet};
 
-impl<'a, K, V> Arbitrary<'a> for HashMap<K, V>
+impl<'a, K, V> Arbitrary<'a> for bevy::utils::HashMap<K, V>
 where
     K: Arbitrary<'a> + Eq + Hash,
     V: Arbitrary<'a>,
@@ -21,7 +20,7 @@ where
     }
 }
 
-impl<'a, A> Arbitrary<'a> for HashSet<A>
+impl<'a, A> Arbitrary<'a> for bevy::utils::HashSet<A>
 where
     A: Arbitrary<'a> + Eq + Hash,
 {
