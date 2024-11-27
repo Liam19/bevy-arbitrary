@@ -1,5 +1,5 @@
-use super::*;
-
+use crate::{Arbitrary, Result, Unstructured};
+use std::hash::Hash;
 use bevy::utils::{HashMap, HashSet};
 
 impl<'a, K, V> Arbitrary<'a> for HashMap<K, V>
