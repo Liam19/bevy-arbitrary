@@ -22,6 +22,7 @@
 #![deny(rust_2018_idioms)]
 #![deny(unused)]
 
+mod bevy;
 mod error;
 mod foreign;
 pub mod size_hint;
