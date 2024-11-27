@@ -1,6 +1,6 @@
 use super::*;
 
-use bevy::utils::hashbrown::{HashMap, HashSet};
+use bevy::utils::{HashMap, HashSet};
 
 impl<'a, K, V> Arbitrary<'a> for HashMap<K, V>
 where
