@@ -22,6 +22,7 @@ documentation = "https://docs.rs/arbitrary/"
 [dependencies]
 derive_arbitrary = { version = "1.4.0", path = "./derive", optional = true }
 bevy = { version = "0.15.0", default-features = false }
+rand = "0.8.5"
 
 [features]
 # Turn this feature on to enable support for `#[derive(Arbitrary)]`.
