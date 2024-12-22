@@ -6,8 +6,9 @@ use rand::{thread_rng, Rng};
 impl<'a> Arbitrary<'a> for Entity {
     fn arbitrary(u: &mut Unstructured<'a>) -> Result<Self> {
         let low = u32::arbitrary(u)?;
-        // Max value for high: 0x7FFF_FFFF (2147483647)
-        let high = thread_rng().gen_range(0..0x7FFF_FFFF);
+        // Max value for high (generation): 0x7FFF_FFFF (2147483647)
+        // Using smaller number to be realistic for a Bevy app
+        let high = thread_rng().gen_range(0..10_000);
 
         let bits = pack_into_u64(low, high);
 
