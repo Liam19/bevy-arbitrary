@@ -19,9 +19,9 @@ documentation = "https://docs.rs/arbitrary/"
 # rust-version = "1.63.0"
 
 [dependencies]
-proc-macro2 = "1.0"
-quote = "1.0"
-syn = { version = "2", features = ['derive', 'parsing', 'extra-traits'] }
+proc-macro2 = "1.0.92"
+quote = "1.0.38"
+syn = { version = "2.0.93", features = ['derive', 'parsing', 'extra-traits'] }
 
 [lib]
 proc-macro = true
