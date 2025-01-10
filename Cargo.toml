@@ -19,10 +19,15 @@ repository = "https://github.com/rust-fuzz/arbitrary/"
 documentation = "https://docs.rs/arbitrary/"
 # rust-version = "1.63.0" # Keep in sync with version documented in the README.md
 
+[patch.crates-io]
+bevy = { git = "https://github.com/bevyengine/bevy.git", tag = "v0.15.0" }
+
+
 [dependencies]
 derive_arbitrary = { version = "1.4.0", path = "./derive", optional = true }
-bevy = { version = "0.15.1", default-features = false }
 rand = "0.8.5"
+bevy = { version = "=0.15.0", default-features = false }
+
 
 [features]
 # Turn this feature on to enable support for `#[derive(Arbitrary)]`.
